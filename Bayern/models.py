@@ -7,7 +7,7 @@ from django.db import models
 
 class Piece(models.Model):
 	name = models.CharField(verbose_name='إسم القطعة', max_length=200)
-	serial = models.DecimalField(verbose_name='الرقم التسلسلي', unique=False, max_digits=11, decimal_places=0)
+	serial = models.CharField(verbose_name='الرقم التسلسلي', unique=False, max_length=11)
 	description = models.TextField(verbose_name='الوصف', null=True, blank=True)
 	st = models.BooleanField(verbose_name='أصلي')
 	barcode = models.DecimalField(verbose_name='بار كود', null=True, blank=True, max_digits=20, decimal_places=0)
