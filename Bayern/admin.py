@@ -7,7 +7,7 @@ from django import forms
 class PieceAdmin(admin.ModelAdmin):
 	list_per_page = 1000000000
 	fieldsets = [(None, {'fields': ['name', 'serial','st', 'description', 'barcode']}), ('المتجر', {'fields': ['shop_stock', 'shop_min_stock', 'shop_selling_price', 'shop_place']}), ('المخزن', {'fields': ['store_stock', 'store_min_stock', 'store_buying_price', 'store_place']})]
-	list_display = ('id', 'formatted_serial', 'name', 'colored_shop_stock', 'colored_store_stock', 'st', 'description', 'shop_selling_price')
+	list_display = ('id', 'formatted_serial', 'name', 'colored_shop_stock', 'colored_store_stock', 'st', 'description', 'shop_place', 'shop_selling_price')
 	ordering = ['id']
 	search_fields = ['id', 'name', 'serial', 'description']
 	list_filter = ['st']
