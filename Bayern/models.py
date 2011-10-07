@@ -79,10 +79,10 @@ def insert(original, new, pos):
 
 
 class StoreTransaction(models.Model):
-	TRANSACTION_TYPES = (('En', 'دخول'), ('Ex', 'بيع'),)
+	TRANSACTION_TYPES = (('En', 'دخول'), ('Ex', 'خروج'),)
 	piece = models.ForeignKey(Piece, verbose_name='رقم القطعة التسلسلي')
 	date = models.DateTimeField(verbose_name='تاريخ')
-	transaction_type = models.CharField(max_length='2', choices=TRANSACTION_TYPES, verbose_name='دخول/بيع')
+	transaction_type = models.CharField(max_length='2', choices=TRANSACTION_TYPES, verbose_name='دخول/خروج')
 	number_of_pieces = models.PositiveIntegerField(verbose_name='عدد القطع', default=1)
 	#entry = models.PositiveIntegerField(verbose_name='دخول', default=0)
 	#exit = models.PositiveIntegerField(verbose_name='خروج', default=0)
