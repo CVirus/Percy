@@ -9,6 +9,10 @@ label[for=id_return_field].vCheckboxLabel {
 
 }
 
+ul[id=id_transaction_type] {
+	float: right !important;
+
+}
 
 p.datetime {
   float: right !important;
