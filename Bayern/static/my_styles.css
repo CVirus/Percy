@@ -1,0 +1,16 @@
+
+label[for=id_st].vCheckboxLabel {
+	float: right !important;
+
+}
+
+label[for=id_return_field].vCheckboxLabel {
+	float: right !important;
+
+}
+
+/*
+#changelist table{
+	width: 85%;
+}
+*/
