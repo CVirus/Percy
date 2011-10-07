@@ -56,6 +56,18 @@ class Piece(models.Model):
 	colored_shop_stock.admin_order_field = 'shop_stock'
 	colored_shop_stock.short_description = 'رصيد المتجر'
 
+	def shop_place_ltr(self):
+		return '<span dir=ltr>%s</span>' % (self.shop_place)
+	shop_place_ltr.allow_tags = True
+	shop_place_ltr.admin_order_field = 'shop_place'
+	shop_place_ltr.short_description = 'المكان'
+
+	def store_place_ltr(self):
+		return '<span dir=ltr>%s</span>' % (self.store_place)
+	store_place_ltr.allow_tags = True
+	store_place_ltr.admin_order_field = 'store_place'
+	store_place_ltr.short_description = 'المكان'
+
 	def is_store_running_out(self):
 		return self.store_stock <= self.store_min_stock
 
@@ -113,7 +125,8 @@ class StoreTransaction(models.Model):
 	store_stock.short_description = 'رصيد'
 
 	def piece_place(self):
-		return self.piece.store_place
+		return self.piece.store_place_ltr()
+	piece_place.allow_tags = True
 	piece_place.admin_order_field = 'piece__store_place'
 	piece_place.short_description = 'مكان'
 
@@ -194,7 +207,8 @@ class ShopTransaction(models.Model):
 	shop_stock.short_description = 'رصيد'
 
 	def piece_place(self):
-		return self.piece.shop_place
+		return self.piece.shop_place_ltr()
+	piece_place.allow_tags = True
 	piece_place.admin_order_field = 'piece__shop_place'
 	piece_place.short_description = 'مكان'
 

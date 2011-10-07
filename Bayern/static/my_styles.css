@@ -17,3 +17,11 @@ ul[id=id_transaction_type] {
 p.datetime {
   float: right !important;
 }
+
+input[id=id_shop_place].vTextField {
+  direction: ltr;
+}
+
+input[id=id_store_place].vTextField {
+  direction: ltr;
+}
