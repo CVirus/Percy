@@ -9,8 +9,7 @@ label[for=id_return_field].vCheckboxLabel {
 
 }
 
-/*
-#changelist table{
-	width: 85%;
+
+p.datetime {
+  float: right !important;
 }
-*/
