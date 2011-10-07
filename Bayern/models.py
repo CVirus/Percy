@@ -182,6 +182,7 @@ class ShopTransaction(models.Model):
 	number_of_pieces = models.PositiveIntegerField(verbose_name='عدد القطع', default=1)
 	notes = models.TextField(verbose_name='ملاحظات', max_length=200, blank=True)
 	price = models.BigIntegerField(verbose_name='تكلفة المعاملة', editable=False, null=True)
+	piece_price = models.BigIntegerField(verbose_name='سعر القطعة', null=False)
 	from_store = models.BooleanField(default=False)
 
 	def __unicode__(self):
@@ -226,11 +227,11 @@ class ShopTransaction(models.Model):
 			print "will calc"
 			self.piece.shop_stock = self.piece.shop_stock + self.number_of_pieces
 			if self.from_store == False:
-				self.price = (self.number_of_pieces*self.piece.store_buying_price).__neg__()
+				self.price = (self.number_of_pieces*self.piece_price).__neg__()
 		else:
 			# FIX ME: Check if not enough 
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
-			self.price = (self.number_of_pieces*self.piece.shop_selling_price)
+			self.price = (self.number_of_pieces*self.piece_price)
 		self.piece.save()
 		super(ShopTransaction, self).save(*args, **kwargs)
 
