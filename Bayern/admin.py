@@ -53,7 +53,7 @@ class StoreTransactionAdmin(admin.ModelAdmin):
 
 class ShopTransactionAdmin(admin.ModelAdmin):
 	radio_fields = {"transaction_type": admin.VERTICAL}
-	fields = ('date','piece_name', 'piece_place', 'piece', 'transaction_type', 'number_of_pieces', 'notes','piece_price', 'price')
+	fields = ('date','piece_name', 'piece_place', 'piece', 'transaction_type', 'number_of_pieces', 'notes', 'piece_price', 'price')
 	readonly_fields = ('piece_name', 'piece_place', 'price')
 	list_display = ('date', 'piece_serial', 'piece_name', 'piece_place', 'transaction_type', 'number_of_pieces', 'notes', 'shop_stock', 'piece_price', 'price', 'piece_st')
 	list_filter = ['date', 'transaction_type']
