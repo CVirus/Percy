@@ -4,6 +4,7 @@ from Bayern.models import Piece, StoreTransaction, ShopTransaction
 from django.contrib import admin
 from django import forms
 
+
 class PieceAdmin(admin.ModelAdmin):
 	list_per_page = 200
 	fieldsets = [(None, {'fields': ['name', 'serial','st', 'description', 'barcode']}), ('المتجر', {'fields': ['shop_stock', 'shop_min_stock', 'shop_selling_price', 'shop_place']}), ('المخزن', {'fields': ['store_stock', 'store_min_stock', 'store_buying_price', 'store_place']})]
@@ -20,19 +21,6 @@ class PieceAdmin(admin.ModelAdmin):
 			}
 
 
-"""
-class TransactionAdminForm(forms.ModelForm):
-	name = forms.CharField()
-	date = forms.DateTimeField()
-
-	def __init__(self, *args, **kwargs):
-		super(TransactionAdminForm, self).__init__(*args, **kwargs)
-
-		if kwargs.has_key('instance'):
-			instance = kwargs['instance']
-			self.initial['name'] = instance
-"""
-
 class StoreTransactionAdmin(admin.ModelAdmin):
 	fields = ('date','piece_name', 'piece_place', 'piece', 'transaction_type', 'number_of_pieces', 'notes', 'price')
 	readonly_fields = ('piece_name', 'piece_place', 'price')
@@ -42,8 +30,6 @@ class StoreTransactionAdmin(admin.ModelAdmin):
 	search_fields = ['piece__name', 'piece__serial', 'price', 'piece__store_place']
 	raw_id_fields = ("piece",)
 
-
-	#form = StoreTransactionAdminForm
 
 	class Media:
 		css = {

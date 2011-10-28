@@ -4,7 +4,6 @@ import datetime
 from django.db import models
 
 
-
 class Piece(models.Model):
 	name = models.CharField(verbose_name='إسم القطعة', max_length=200)
 	serial = models.CharField(verbose_name='الرقم التسلسلي', unique=False, max_length=11)
@@ -173,6 +172,7 @@ class StoreTransaction(models.Model):
 	class Meta:
 			verbose_name = 'معاملة مخزن'
 			verbose_name_plural = 'معاملات مخزن'
+
 
 class ShopTransaction(models.Model):
 	TRANSACTION_TYPES = (('En', 'دخول'), ('Ex', 'بيع'), ('Re', 'مرتجع'),)
