@@ -93,11 +93,12 @@ class StoreTransaction(models.Model):
 	TRANSACTION_TYPES = (('En', 'دخول'), ('Ex', 'خروج'),)
 	piece = models.ForeignKey(Piece, verbose_name='رقم القطعة التسلسلي')
 	date = models.DateTimeField(verbose_name='تاريخ')
-	transaction_type = models.CharField(max_length='2', choices=TRANSACTION_TYPES, verbose_name='دخول/خروج')
+	transaction_type = models.CharField(max_length='2', choices=TRANSACTION_TYPES, verbose_name='دخول/خروج', default='En')
 	number_of_pieces = models.PositiveIntegerField(verbose_name='عدد القطع', default=1)
 	#entry = models.PositiveIntegerField(verbose_name='دخول', default=0)
 	#exit = models.PositiveIntegerField(verbose_name='خروج', default=0)
 	notes = models.TextField(verbose_name='ملاحظات', max_length=200, blank=True)
+	piece_price = models.BigIntegerField(verbose_name='سعر القطعة', editable=True, null=False, default=0)
 	price = models.BigIntegerField(verbose_name='تكلفة المعاملة', editable=False, null=True)
 
 
@@ -138,24 +139,36 @@ class StoreTransaction(models.Model):
 	piece_st.admin_order_field = 'piece__st'
 	piece_st.short_description = 'أصلي'
 
+
+	def clean(self):
+		from django.core.exceptions import ValidationError
+		# Don't allow draft entries to have a pub_date.
+		#if self.status == 'draft' and self.pub_date is not None:
+		if self.transaction_type == 'Ex':
+			if self.piece.store_stock < self.number_of_pieces:
+				raise ValidationError('عدد قطع المخزن غير كافية')
+		# Set the pub_date for published items if it hasn't been set already.
+		#if self.status == 'published' and self.pub_date is None:
+		#  self.pub_date = datetime.datetime.now()
+
+	
 	def save(self, *args, **kwargs):
+		#FIX ME: Needs to be redone
 		if self.transaction_type == 'En':
 			print "will calc"
 			self.piece.store_stock = self.piece.store_stock + self.number_of_pieces
-			self.price = (self.number_of_pieces*self.piece.store_buying_price).__neg__()
+			self.price = (self.number_of_pieces*self.piece_price).__neg__()
 			self.piece.save()
 		else:
-			if self.piece.store_stock < self.number_of_pieces:
-				self.number_of_pieces = self.piece.store_stock
-				self.piece.store_stock = 0
-			else:
-				self.piece.store_stock = self.piece.store_stock - self.number_of_pieces
-				shop_transaction = ShopTransaction(piece=self.piece,
-													date=datetime.datetime.now,
-													transaction_type='En',
-													number_of_pieces=self.number_of_pieces,
-													from_store=True)
-				shop_transaction.save()
+			self.piece.store_stock = self.piece.store_stock - self.number_of_pieces
+			shop_transaction = ShopTransaction(piece=self.piece,
+												date=self.date,
+												transaction_type='En',
+												number_of_pieces=self.number_of_pieces,
+												from_store=True,
+												piece_price=0)
+			shop_transaction.save()
+			print "SAVED"
 			# This is a transaction that is going to the shop
 			#
 			# Subtract from the total number of pieces in store stock

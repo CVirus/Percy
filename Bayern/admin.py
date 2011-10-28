@@ -22,9 +22,9 @@ class PieceAdmin(admin.ModelAdmin):
 
 
 class StoreTransactionAdmin(admin.ModelAdmin):
-	fields = ('date','piece_name', 'piece_place', 'piece', 'transaction_type', 'number_of_pieces', 'notes', 'price')
+	fields = ('date','piece_name', 'piece_place', 'piece', 'transaction_type', 'number_of_pieces', 'notes', 'piece_price', 'price')
 	readonly_fields = ('piece_name', 'piece_place', 'price')
-	list_display = ('date', 'piece_serial', 'piece_name', 'piece_place', 'transaction_type', 'number_of_pieces', 'notes', 'store_stock', 'price', 'piece_st')
+	list_display = ('date', 'piece_serial', 'piece_name', 'piece_place', 'transaction_type', 'number_of_pieces', 'notes', 'store_stock', 'piece_price', 'price', 'piece_st')
 	list_filter = ['date', 'transaction_type']
 	date_hierarchy = 'date'
 	search_fields = ['piece__name', 'piece__serial', 'price', 'piece__store_place']
@@ -35,6 +35,7 @@ class StoreTransactionAdmin(admin.ModelAdmin):
 		css = {
 			"all": ("my_styles.css",)
 			}
+		js = ("myjs.js",)
 
 
 class ShopTransactionAdmin(admin.ModelAdmin):
