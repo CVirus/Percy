@@ -142,18 +142,12 @@ class StoreTransaction(models.Model):
 
 	def clean(self):
 		from django.core.exceptions import ValidationError
-		# Don't allow draft entries to have a pub_date.
-		#if self.status == 'draft' and self.pub_date is not None:
 		if self.transaction_type == 'Ex':
 			if self.piece.store_stock < self.number_of_pieces:
 				raise ValidationError('عدد قطع المخزن غير كافية')
-		# Set the pub_date for published items if it hasn't been set already.
-		#if self.status == 'published' and self.pub_date is None:
-		#  self.pub_date = datetime.datetime.now()
 
 	
 	def save(self, *args, **kwargs):
-		#FIX ME: Needs to be redone
 		if self.transaction_type == 'En':
 			print "will calc"
 			self.piece.store_stock = self.piece.store_stock + self.number_of_pieces
@@ -168,18 +162,6 @@ class StoreTransaction(models.Model):
 												from_store=True,
 												piece_price=0)
 			shop_transaction.save()
-			print "SAVED"
-			# This is a transaction that is going to the shop
-			#
-			# Subtract from the total number of pieces in store stock
-			#
-			# If total number of pieces in store stock is less than the number of
-			# pieces in the transaction, then the store stock is set to 0 and the 
-			# number of pieces in the transaction is set to the store stock
-			#
-			# Create a new shop transaction with Entry equals to the number of pieces
-			# in the transaction
-			print "this is a piece that is going to the shop"
 		super(StoreTransaction, self).save(*args, **kwargs)
 
 	class Meta:
@@ -235,6 +217,14 @@ class ShopTransaction(models.Model):
 	piece_st.admin_order_field = 'piece__st'
 	piece_st.short_description = 'أصلي'
 
+
+	def clean(self):
+		from django.core.exceptions import ValidationError
+		if self.transaction_type == 'Ex':
+			if self.piece.shop_stock < self.number_of_pieces:
+				raise ValidationError('عدد قطع المتجر غير كافية')
+
+
 	def save(self, *args, **kwargs):
 		if self.transaction_type == 'En' or self.transaction_type == 'Re':
 			print "will calc"
@@ -242,7 +232,6 @@ class ShopTransaction(models.Model):
 			if self.from_store == False:
 				self.price = (self.number_of_pieces*self.piece_price).__neg__()
 		else:
-			# FIX ME: Check if not enough 
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price)
 		self.piece.save()
