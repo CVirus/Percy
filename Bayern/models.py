@@ -25,12 +25,12 @@ class Piece(models.Model):
 
 
 	def save(self, *args, **kwargs):
-		if self.store_stock < self.store_min_stock:
+		if self.store_stock <= self.store_min_stock:
 			self.store_min_stock_reached = True
 		else:
 			self.store_min_stock_reached = False
 
-		if self.shop_stock < self.shop_min_stock:
+		if self.shop_stock <= self.shop_min_stock:
 			self.shop_min_stock_reached = True
 		else:
 			self.shop_min_stock_reached = False
@@ -167,7 +167,7 @@ class StoreTransaction(models.Model):
 		if self.transaction_type == 'En':
 			self.piece.store_stock = self.piece.store_stock + self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price).__neg__()
-			if self.piece.store_stock < self.piece.store_min_stock:
+			if self.piece.store_stock <= self.piece.store_min_stock:
 				self.piece.store_min_stock_reached = True
 			else:
 				self.piece.store_min_stock_reached = False
@@ -261,7 +261,7 @@ class ShopTransaction(models.Model):
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price)
 
-		if self.piece.shop_stock < self.piece.shop_min_stock:
+		if self.piece.shop_stock <= self.piece.shop_min_stock:
 			self.piece.shop_min_stock_reached = True
 		else:
 			self.piece.shop_min_stock_reached = False
