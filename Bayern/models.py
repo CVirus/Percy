@@ -150,7 +150,7 @@ class StoreTransaction(models.Model):
 		if self.piece.st == False:
 			return """<img alt="False" src="/static/admin/img/admin/icon-no.gif">"""
 		else:
-			return """<img alt="False" src="/static/admin/img/admin/icon-yes.gif">"""
+			return """<img alt="True" src="/static/admin/img/admin/icon-yes.gif">"""
 	piece_st.allow_tags = True
 	piece_st.admin_order_field = 'piece__st'
 	piece_st.short_description = 'أصلي'
@@ -235,7 +235,7 @@ class ShopTransaction(models.Model):
 		if self.piece.st == False:
 			return """<img alt="False" src="/static/admin/img/admin/icon-no.gif">"""
 		else:
-			return """<img alt="False" src="/static/admin/img/admin/icon-yes.gif">"""
+			return """<img alt="True" src="/static/admin/img/admin/icon-yes.gif">"""
 	piece_st.allow_tags = True
 	piece_st.admin_order_field = 'piece__st'
 	piece_st.short_description = 'أصلي'
