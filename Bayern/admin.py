@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Bayern.models import Piece, StoreTransaction, ShopTransaction
+from Bayern.models import Piece, StoreTransaction, ShopTransaction, Expenses
 from django.contrib import admin
 from django import forms
 
@@ -55,6 +55,17 @@ class ShopTransactionAdmin(admin.ModelAdmin):
 			}
 
 
+class ExpensesAdmin(admin.ModelAdmin):
+	list_display = ('date', 'cost', 'expense_type', 'description')
+	search_fields = ['cost', 'expense_type', 'description']
+	list_filter = ['expense_type']
+
+	class Media:
+		css = {
+			"all": ("my_styles.css",)
+			}
+
 admin.site.register(Piece, PieceAdmin)
 admin.site.register(StoreTransaction, StoreTransactionAdmin)
 admin.site.register(ShopTransaction, ShopTransactionAdmin)
+admin.site.register(Expenses, ExpensesAdmin)
