@@ -11,7 +11,7 @@ class PieceAdmin(admin.ModelAdmin):
 	list_display = ('id', 'formatted_serial', 'name', 'colored_shop_stock', 'colored_store_stock', 'st', 'description', 'shop_place_ltr', 'shop_selling_price')
 	ordering = ['id']
 	search_fields = ['id', 'name', 'serial', 'description']
-	list_filter = ['st']
+	list_filter = ['st', 'shop_min_stock_reached', 'store_min_stock_reached']
 	list_display_links = ('formatted_serial',)
 
 

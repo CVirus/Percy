@@ -13,15 +13,30 @@ class Piece(models.Model):
 
 	shop_stock = models.PositiveIntegerField(verbose_name='رصيد')
 	shop_min_stock = models.PositiveIntegerField(verbose_name='الحد الأدني')
-	shop_min_stock_reached = models.BooleanField(default=False)
+	shop_min_stock_reached = models.BooleanField(verbose_name='طلبية متجر', default=False)
 	shop_selling_price = models.PositiveIntegerField(verbose_name='سعر البيع')
 	shop_place = models.CharField(verbose_name='المكان', max_length=200)
 
 	store_stock = models.PositiveIntegerField(verbose_name='رصيد')
 	store_min_stock = models.PositiveIntegerField(verbose_name='الحد الأدني')
-	store_min_stock_reached = models.BooleanField(default=False)
+	store_min_stock_reached = models.BooleanField(verbose_name='طلبية مخزن', default=False)
 	store_buying_price = models.PositiveIntegerField(verbose_name='سعر الشراء')
 	store_place = models.CharField(verbose_name='المكان', max_length=200)
+
+
+	def save(self, *args, **kwargs):
+		if self.store_stock < self.store_min_stock:
+			self.store_min_stock_reached = True
+		else:
+			self.store_min_stock_reached = False
+
+		if self.shop_stock < self.shop_min_stock:
+			self.shop_min_stock_reached = True
+		else:
+			self.shop_min_stock_reached = False
+
+		super(Piece, self).save(*args, **kwargs)
+
 
 	def __unicode__(self):
 		return str(self.serial)
@@ -149,9 +164,12 @@ class StoreTransaction(models.Model):
 	
 	def save(self, *args, **kwargs):
 		if self.transaction_type == 'En':
-			print "will calc"
 			self.piece.store_stock = self.piece.store_stock + self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price).__neg__()
+			if self.piece.store_stock < self.piece.store_min_stock:
+				self.piece.store_min_stock_reached = True
+			else:
+				self.piece.store_min_stock_reached = False
 			self.piece.save()
 		else:
 			self.piece.store_stock = self.piece.store_stock - self.number_of_pieces
@@ -227,13 +245,18 @@ class ShopTransaction(models.Model):
 
 	def save(self, *args, **kwargs):
 		if self.transaction_type == 'En' or self.transaction_type == 'Re':
-			print "will calc"
 			self.piece.shop_stock = self.piece.shop_stock + self.number_of_pieces
 			if self.from_store == False:
 				self.price = (self.number_of_pieces*self.piece_price).__neg__()
 		else:
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price)
+
+		if self.piece.shop_stock < self.piece.shop_min_stock:
+			self.piece.shop_min_stock_reached = True
+		else:
+			self.piece.shop_min_stock_reached = False
+
 		self.piece.save()
 		super(ShopTransaction, self).save(*args, **kwargs)
 
