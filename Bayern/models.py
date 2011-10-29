@@ -278,7 +278,7 @@ class Expenses(models.Model):
 	TRANSACTION_TYPES = (('EnS', 'دخول مخزن'), ('EnH', 'دخول متجر'), ('Re', 'مرتجع'), ('Mi', 'مصروفات متنوعة'),)
 	date = models.DateTimeField(verbose_name='تاريخ')
 	cost = models.BigIntegerField(verbose_name='تكلفة', null=False)
-	expense_type = models.CharField(max_length='3', choices=TRANSACTION_TYPES, editable=False, verbose_name='نوع المصروفات')
+	expense_type = models.CharField(max_length='3', choices=TRANSACTION_TYPES, default='Mi', editable=False, verbose_name='نوع المصروفات')
 	description = models.TextField(verbose_name='الوصف', null=True, blank=True)
 
 	def __unicode__(self):
