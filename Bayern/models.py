@@ -172,7 +172,7 @@ class StoreTransaction(models.Model):
 			else:
 				self.piece.store_min_stock_reached = False
 			self.piece.save()
-			expense = Expenses(date=self.date, cost=self.price, expense_type='EnS')
+			expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='EnS')
 			expense.save()
 		else:
 			self.piece.store_stock = self.piece.store_stock - self.number_of_pieces
@@ -253,9 +253,9 @@ class ShopTransaction(models.Model):
 			self.piece.shop_stock = self.piece.shop_stock + self.number_of_pieces
 			if self.from_store == False:
 				self.price = (self.number_of_pieces*self.piece_price).__neg__()
-				expense = Expenses(date=self.date, cost=self.price, expense_type='EnH')
+				expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='EnH')
 			if self.transaction_type == 'Re':
-				expense = Expenses(date=self.date, cost=self.price, expense_type='Re')
+				expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='Re')
 			expense.save()
 		else:
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
