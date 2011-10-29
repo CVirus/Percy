@@ -115,6 +115,7 @@ class StoreTransaction(models.Model):
 	notes = models.TextField(verbose_name='ملاحظات', max_length=200, blank=True)
 	piece_price = models.BigIntegerField(verbose_name='سعر القطعة', editable=True, null=False, default=0)
 	price = models.BigIntegerField(verbose_name='تكلفة المعاملة', editable=False, null=True)
+	stock_on_transaction = models.BigIntegerField(verbose_name='رصيد', editable=False, null=True)
 
 
 	def __unicode__(self):
@@ -180,6 +181,7 @@ class StoreTransaction(models.Model):
 												from_store=True,
 												piece_price=0)
 			shop_transaction.save()
+		self.stock_on_transaction = self.piece.store_stock
 		super(StoreTransaction, self).save(*args, **kwargs)
 
 	class Meta:
@@ -197,6 +199,7 @@ class ShopTransaction(models.Model):
 	price = models.BigIntegerField(verbose_name='تكلفة المعاملة', editable=False, null=True)
 	piece_price = models.BigIntegerField(verbose_name='سعر القطعة', null=False)
 	from_store = models.BooleanField(default=False)
+	stock_on_transaction = models.BigIntegerField(verbose_name='رصيد', editable=False, null=True)
 
 	def __unicode__(self):
 		return self.piece.name
@@ -258,6 +261,7 @@ class ShopTransaction(models.Model):
 			self.piece.shop_min_stock_reached = False
 
 		self.piece.save()
+		self.stock_on_transaction = self.piece.shop_stock
 		super(ShopTransaction, self).save(*args, **kwargs)
 
 	class Meta:
