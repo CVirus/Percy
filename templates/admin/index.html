@@ -18,27 +18,54 @@
         <div class="module">
         <table summary="{% blocktrans with app.name as name %}Models available in the {{ name }} application.{% endblocktrans %}">
         <caption><a href="{{ app.app_url }}" class="section">{% blocktrans with app.name as name %}{{ name }}{% endblocktrans %}</a></caption>
-        {% for model in app.models %}
-            <tr>
-            {% if model.perms.change %}
-                <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
-            {% else %}
-                <th scope="row">{{ model.name }}</th>
-            {% endif %}
 
-            {% if model.perms.add %}
-                <td><a href="{{ model.admin_url }}add/" class="addlink">{% trans 'Add' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
+	{% if user.username == "ashraf" %}
+		{% for model in app.models %}
+			<tr>
+			{% if model.perms.change and user.username == "ashraf" %}
+				<th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+			{% else %}
+				<th scope="row">{{ model.name }}</th>
+			{% endif %}
 
-            {% if model.perms.change %}
-                <td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
-            {% else %}
-                <td>&nbsp;</td>
-            {% endif %}
-            </tr>
-        {% endfor %}
+			{% if model.perms.add %}
+				<td><a href="{{ model.admin_url }}add/" class="addlink">{% trans 'Add' %}</a></td>
+			{% else %}
+				<td>&nbsp;</td>
+			{% endif %}
+
+			{% if model.perms.change and user.username == "ashraf" %}
+				<td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
+			{% else %}
+				<td>&nbsp;</td>
+			{% endif %}
+			</tr>
+		{% endfor %}
+	{% else %}
+		{% for model in app.models|slice:"1:" %}
+			<tr>
+			{% if model.perms.change and user.username == "ashraf" %}
+				<th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+			{% else %}
+				<th scope="row">{{ model.name }}</th>
+			{% endif %}
+
+			{% if model.perms.add %}
+				<td><a href="{{ model.admin_url }}add/" class="addlink">{% trans 'Add' %}</a></td>
+			{% else %}
+				<td>&nbsp;</td>
+			{% endif %}
+
+			{% if model.perms.change and user.username == "ashraf" %}
+				<td><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
+			{% else %}
+				<td>&nbsp;</td>
+			{% endif %}
+			</tr>
+		{% endfor %}
+        {% endif %}
+
+
         </table>
         </div>
     {% endfor %}
@@ -47,9 +74,9 @@
 {% endif %}
 
 <br />
-{% ifequal user.username "ashraf" %}
+{% if user.username == "ashraf" %}
 	<a href='/Bayern/total'>قيمة المحل</a>
-{% endifequal %}
+{% endif %}
 </table>
 </div>
 {% endblock %}
