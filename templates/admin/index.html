@@ -66,12 +66,14 @@
         {% endif %}
 
 
-        </table>
+        
         </div>
     {% endfor %}
 {% else %}
-    <p>{% trans "You don't have permission to edit anything." %}</p>
+	<tr><td>
+    <p>{% trans "You don't have permission to edit anything." %}</p></tr></td>
 {% endif %}
+</table>
 
 <br />
 {% if user.username == "ashraf" %}
