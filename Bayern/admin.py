@@ -58,7 +58,8 @@ class ShopTransactionAdmin(admin.ModelAdmin):
 class ExpensesAdmin(admin.ModelAdmin):
 	list_display = ('date', 'cost', 'expense_type', 'description')
 	search_fields = ['cost', 'expense_type', 'description']
-	list_filter = ['expense_type']
+	list_filter = ['expense_type', 'date']
+	date_hierarchy = 'date'
 
 	class Media:
 		css = {
