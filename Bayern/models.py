@@ -110,8 +110,6 @@ class StoreTransaction(models.Model):
 	date = models.DateTimeField(verbose_name='تاريخ')
 	transaction_type = models.CharField(max_length='2', choices=TRANSACTION_TYPES, verbose_name='دخول/خروج', default='En')
 	number_of_pieces = models.PositiveIntegerField(verbose_name='عدد القطع', default=1)
-	#entry = models.PositiveIntegerField(verbose_name='دخول', default=0)
-	#exit = models.PositiveIntegerField(verbose_name='خروج', default=0)
 	notes = models.TextField(verbose_name='ملاحظات', max_length=200, blank=True)
 	piece_price = models.BigIntegerField(verbose_name='سعر القطعة', editable=True, null=False, default=0)
 	price = models.BigIntegerField(verbose_name='تكلفة المعاملة', editable=False, null=True)
