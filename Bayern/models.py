@@ -170,8 +170,8 @@ class StoreTransaction(models.Model):
 			else:
 				self.piece.store_min_stock_reached = False
 			self.piece.save()
-			expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='EnS')
-			expense.save()
+			transaction = Transactions(date=self.date, cost=self.paid, description=self.notes, transaction_type='EnS')
+			transaction.save()
 		else:
 			self.piece.store_stock = self.piece.store_stock - self.number_of_pieces
 			shop_transaction = ShopTransaction(piece=self.piece,
@@ -250,11 +250,11 @@ class ShopTransaction(models.Model):
 		if self.transaction_type == 'En' or self.transaction_type == 'Re':
 			self.piece.shop_stock = self.piece.shop_stock + self.number_of_pieces
 			if self.from_store == False:
-				self.price = (self.number_of_pieces*self.piece_price).__neg__()
-				expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='EnH')
+				transaction = Transactions(date=self.date, cost=self.paid, description=self.notes, transaction_type='EnH')
+				transaction.save()
 			if self.transaction_type == 'Re':
-				expense = Expenses(date=self.date, cost=self.price, description=self.notes, expense_type='Re')
-			expense.save()
+				transaction = Transactions(date=self.date, cost=self.paid, description=self.notes, transaction_type='Re')
+				transaction.save()
 		else:
 			self.piece.shop_stock = self.piece.shop_stock - self.number_of_pieces
 			self.price = (self.number_of_pieces*self.piece_price)
@@ -272,16 +272,16 @@ class ShopTransaction(models.Model):
 			verbose_name = 'معاملة متجر'
 			verbose_name_plural = 'معاملات متجر'
 
-class Expenses(models.Model):
+class Transactions(models.Model):
 	TRANSACTION_TYPES = (('EnS', 'دخول مخزن'), ('EnH', 'دخول متجر'), ('Re', 'مرتجع'), ('Mi', 'مصروفات متنوعة'),)
 	date = models.DateTimeField(verbose_name='تاريخ')
 	cost = models.BigIntegerField(verbose_name='تكلفة', null=False)
-	expense_type = models.CharField(max_length='3', choices=TRANSACTION_TYPES, default='Mi', editable=False, verbose_name='نوع المصروفات')
+	transaction_type = models.CharField(max_length='3', choices=TRANSACTION_TYPES, default='Mi', editable=False, verbose_name='نوع المصروفات')
 	description = models.TextField(verbose_name='الوصف', null=True, blank=True)
 
 	def __unicode__(self):
 		return str(self.expense_type)
 
 	class Meta:
-			verbose_name = 'مصروفات'
-			verbose_name_plural = 'مصروفات'
+			verbose_name = 'معاملة'
+			verbose_name_plural = 'معاملات'

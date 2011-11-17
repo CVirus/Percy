@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Bayern.models import Piece, StoreTransaction, ShopTransaction, Expenses
+from Bayern.models import Piece, StoreTransaction, ShopTransaction, Transactions
 from django.contrib import admin
 from django import forms
 
@@ -55,10 +55,10 @@ class ShopTransactionAdmin(admin.ModelAdmin):
 			}
 
 
-class ExpensesAdmin(admin.ModelAdmin):
-	list_display = ('date', 'cost', 'expense_type', 'description')
-	search_fields = ['cost', 'expense_type', 'description']
-	list_filter = ['expense_type', 'date']
+class TransactionsAdmin(admin.ModelAdmin):
+	list_display = ('date', 'cost', 'transaction_type', 'description')
+	search_fields = ['cost', 'transaction_type', 'description']
+	list_filter = ['transaction_type', 'date']
 	date_hierarchy = 'date'
 
 	class Media:
@@ -69,4 +69,4 @@ class ExpensesAdmin(admin.ModelAdmin):
 admin.site.register(Piece, PieceAdmin)
 admin.site.register(StoreTransaction, StoreTransactionAdmin)
 admin.site.register(ShopTransaction, ShopTransactionAdmin)
-admin.site.register(Expenses, ExpensesAdmin)
+admin.site.register(Transactions, TransactionsAdmin)
